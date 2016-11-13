@@ -9,6 +9,8 @@
   "author": "github: wataruoguchi, twitter: @watarutwt",
   "license": "BSD-2-Clause",
   "dependencies": {
-    "express": "*"
+    "express": "*",
+    "mongodb": "*",
+    "body-parser": "*"
   }
 }
