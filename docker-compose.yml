@@ -1,19 +1,31 @@
-mongo:
-  image: mongo:2.6.11
-  ports:
-    - "27017:27017"
-application:
-  build: .
-  command: node --debug=5858 app.js --color=always
-  ports:
-    - "3000:3000"
-    - "5858:5858"
-  volumes:
-    - .:/app
-    - /app/node_modules
-  working_dir: /app
-  links:
-    - mongo
+version: "2"
+services:
+  mariadb:
+    image: mariadb:5.5
+    command: mysqld --innodb-buffer-pool-size=20M
+    volumes:
+      - ./mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=DB
+    ports:
+      - "3306:3306"
+  php-myadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    links:
+      - mariadb
+  php-apache:
+    image: php:5.5-apache
+    volumes:
+      - ./src:/var/www/html
+      - /config/php.ini:/usr/local/etc/php/
+    working_dir: /var/www/html
+    ports:
+      - "8000:80"
+    links:
+      - mariadb
+  
 
 ###
 # docker-compose rm -f
